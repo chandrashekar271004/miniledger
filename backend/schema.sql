@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS users (
+  id BIGSERIAL PRIMARY KEY,
+  phone VARCHAR(20) UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS loans (
+  id BIGSERIAL PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  friend_name VARCHAR(100) NOT NULL,
+  amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
+  due_date DATE NOT NULL,
+  repaid_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS loans_user_id_idx ON loans(user_id);
+CREATE INDEX IF NOT EXISTS loans_due_date_idx ON loans(due_date);
