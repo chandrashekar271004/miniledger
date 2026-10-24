@@ -5,7 +5,11 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:4000";
+const runtimeEnv = (globalThis as typeof globalThis & {
+  process?: { env?: Record<string, string | undefined> }
+}).process?.env;
+
+const API_URL = runtimeEnv?.EXPO_PUBLIC_API_URL ?? "http://localhost:4000";
 
 type Entry = {
   id: number; friendName: string; amount: number; dueDate: string;
